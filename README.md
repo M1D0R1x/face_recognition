@@ -134,12 +134,13 @@ While Windows isn't officially supported, helpful users have posted instructions
 
 ### Command-Line Interface
 
-When you install `face_recognition`, you get two simple command-line 
+When you install `face_recognition`, you get three simple command-line 
 programs:
 
 * `face_recognition` - Recognize faces in a photograph or folder full for 
    photographs.
 * `face_detection` - Find faces in a photograph or folder full for photographs.
+* `face_segregate` - Automatically sort faces from images into separate folders by person.
 
 #### `face_recognition` command line tool
 
@@ -191,6 +192,51 @@ examples/image2.jpg,95,941,244,792
 
 It prints one line for each face that was detected. The coordinates
 reported are the top, right, bottom and left coordinates of the face (in pixels).
+
+#### `face_segregate` command line tool
+
+The `face_segregate` command lets you automatically organize faces from a collection of images 
+into separate folders based on who appears in each image. This is useful when you have a large 
+collection of photos and want to group them by person without manually sorting them.
+
+Just run the command `face_segregate`, passing in a folder of images to process and an output 
+folder where the segregated faces will be saved:
+
+```bash
+$ face_segregate ./my_photo_collection/ ./organized_faces/
+
+Processing 10 images...
+Processing photo1.jpg...
+  Found 2 face(s)
+  Saved face to person_0/photo1_face_0.jpg
+  Saved face to person_1/photo1_face_1.jpg
+Processing photo2.jpg...
+  Found 1 face(s)
+  Saved face to person_0/photo2_face_0.jpg
+
+Segregation complete! Found 2 unique person(s).
+Results saved to: ./organized_faces/
+  person_0: 5 face image(s)
+  person_1: 3 face image(s)
+```
+
+The tool will:
+1. Detect all faces in your images
+2. Use face recognition to group similar faces together
+3. Create a separate folder for each unique person (person_0, person_1, etc.)
+4. Extract and save each face image to the appropriate person's folder
+
+##### Adjusting Tolerance for Face Segregation
+
+If you find that faces of the same person are being split into multiple folders, 
+you can increase the tolerance. If different people are being grouped together, 
+decrease the tolerance:
+
+```bash
+$ face_segregate ./my_photos/ ./organized/ --tolerance 0.5
+```
+
+The default tolerance is 0.6. Lower values make matching more strict.
  
 ##### Adjusting Tolerance / Sensitivity
 
