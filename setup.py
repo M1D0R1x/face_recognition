@@ -40,7 +40,8 @@ setup(
     entry_points={
         'console_scripts': [
             'face_recognition=face_recognition.face_recognition_cli:main',
-            'face_detection=face_recognition.face_detection_cli:main'
+            'face_detection=face_recognition.face_detection_cli:main',
+            'face_segregate=face_recognition.face_segregate_cli:main'
         ]
     },
     install_requires=requirements,

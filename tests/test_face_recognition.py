@@ -17,6 +17,7 @@ from click.testing import CliRunner
 from face_recognition import api
 from face_recognition import face_recognition_cli
 from face_recognition import face_detection_cli
+from face_recognition import face_segregate_cli
 
 
 class Test_face_recognition(unittest.TestCase):
@@ -342,3 +343,28 @@ class Test_face_recognition(unittest.TestCase):
         result = runner.invoke(face_detection_cli.main, args=[image_file, "--model", "cnn"])
         self.assertEqual(result.exit_code, 0)
         self.assertTrue(target_string in result.output)
+
+    def test_face_segregate_command_line_interface_options(self):
+        target_string = 'Show this message and exit.'
+        runner = CliRunner()
+        help_result = runner.invoke(face_segregate_cli.main, ['--help'])
+        self.assertEqual(help_result.exit_code, 0)
+        self.assertTrue(target_string in help_result.output)
+
+    def test_face_segregate_command_line_interface(self):
+        runner = CliRunner()
+        image_folder = os.path.join(os.path.dirname(__file__), 'test_images')
+        
+        with runner.isolated_filesystem():
+            output_folder = './segregated_output'
+            result = runner.invoke(face_segregate_cli.main, args=[image_folder, output_folder])
+            
+            # Check that the command ran successfully
+            self.assertEqual(result.exit_code, 0)
+            
+            # Check that output folder was created
+            self.assertTrue(os.path.exists(output_folder))
+            
+            # Check that at least one person folder was created
+            person_folders = [f for f in os.listdir(output_folder) if f.startswith('person_')]
+            self.assertGreater(len(person_folders), 0)
