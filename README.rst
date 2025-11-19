@@ -11,9 +11,10 @@ Face Recognition
 | `Labeled Faces in the Wild <http://vis-www.cs.umass.edu/lfw/>`__
   benchmark.
 
-| This also provides a simple ``face_recognition`` command line tool
-  that lets
-| you do face recognition on a folder of images from the command line!
+| This also provides simple command line tools including ``face_recognition``,
+  ``face_detection``, and ``face_segregate`` that let
+| you do face recognition, detection, and automatic face organization on a 
+  folder of images from the command line!
 
 | |PyPI|
 | |Build Status|
@@ -140,10 +141,17 @@ Usage
 Command-Line Interface
 ^^^^^^^^^^^^^^^^^^^^^^
 
-| When you install ``face_recognition``, you get a simple command-line
-  program
-| called ``face_recognition`` that you can use to recognize faces in a
-| photograph or folder full for photographs.
+| When you install ``face_recognition``, you get three simple command-line
+  programs:
+  
+| * ``face_recognition`` - Recognize faces in a photograph or folder of photographs.
+| * ``face_detection`` - Find faces in a photograph or folder of photographs. 
+| * ``face_segregate`` - Automatically sort faces from images into separate folders by person.
+
+**face_recognition command**
+
+| The ``face_recognition`` command lets you recognize faces in a photograph or
+| folder full for photographs.
 
 | First, you need to provide a folder with one picture of each person
   you
@@ -239,6 +247,47 @@ If you are using Python 3.4 or newer, pass in a
     $ face_recognition --cpus 4 ./pictures_of_people_i_know/ ./unknown_pictures/
 
 You can also pass in ``--cpus -1`` to use all CPU cores in your system.
+
+**face_segregate command**
+
+| The ``face_segregate`` command lets you automatically organize faces from 
+  a collection of images
+| into separate folders based on who appears in each image. This is useful 
+  when you have a large
+| collection of photos and want to group them by person without manually 
+  sorting them.
+
+| Just run the command ``face_segregate``, passing in a folder of images to 
+  process and an output
+| folder where the segregated faces will be saved:
+
+.. code:: bash
+
+    $ face_segregate ./my_photo_collection/ ./organized_faces/
+
+    Processing 10 images...
+    Processing photo1.jpg...
+      Found 2 face(s)
+      Saved face to person_0/photo1_face_0.jpg
+      Saved face to person_1/photo1_face_1.jpg
+    
+    Segregation complete! Found 2 unique person(s).
+    Results saved to: ./organized_faces/
+      person_0: 5 face image(s)
+      person_1: 3 face image(s)
+
+The tool will:
+
+1. Detect all faces in your images
+2. Use face recognition to group similar faces together
+3. Create a separate folder for each unique person (person_0, person_1, etc.)
+4. Extract and save each face image to the appropriate person's folder
+
+You can adjust the tolerance to control face matching strictness:
+
+.. code:: bash
+
+    $ face_segregate ./my_photos/ ./organized/ --tolerance 0.5
 
 Python Module
 ^^^^^^^^^^^^^
