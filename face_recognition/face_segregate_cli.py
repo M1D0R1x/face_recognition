@@ -3,10 +3,8 @@ from __future__ import print_function
 import click
 import os
 import re
-import shutil
 import face_recognition.api as face_recognition
 import numpy as np
-from collections import defaultdict
 
 
 def image_files_in_folder(folder):
